@@ -1,11 +1,17 @@
-import React from "react";
+import { Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
+import Home from "./components/Home";
+import Batches from "./features/batches/Batches";
 
 function App() {
   return (
-    <div>
+    <>
       <Navbar />
-    </div>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/batches" element={<Batches />} />
+      </Routes>
+    </>
   );
 }
 
