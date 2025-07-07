@@ -1,9 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit";
+import { batchApi } from "../features/batches/batchApi";
 
 export const store = configureStore({
-  reducer: {},
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
+  reducer: {
+    [batchApi.reducerPath]: batchApi.reducer,
+  },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(batchApi.middleware),
 });
-
-export type RootState = ReturnType<typeof store.getState>;
-export type AppDispatch = typeof store.dispatch;
