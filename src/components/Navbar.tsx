@@ -19,6 +19,7 @@ const Navbar: React.FC = () => {
       <div className="mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
         <div className="flex justify-between items-center h-16">
           <h1 className="font-bold text-emerald-700 text-xl">🎓 University</h1>
+
           <div className="hidden md:flex space-x-6">
             <NavLink to="/" className={navLinkStyle}>
               Home
@@ -26,7 +27,7 @@ const Navbar: React.FC = () => {
             <NavLink to="/batches" className={navLinkStyle}>
               Batches
             </NavLink>
-            <NavLink to="/routine" className={navLinkStyle}>
+            <NavLink to="/routines" className={navLinkStyle}>
               Routine
             </NavLink>
             <NavLink to="/events" className={navLinkStyle}>
@@ -36,6 +37,7 @@ const Navbar: React.FC = () => {
               News
             </NavLink>
           </div>
+
           <div className="md:hidden">
             <button onClick={toggleMenu} aria-label="Toggle menu">
               {menuOpen ? (
@@ -64,7 +66,7 @@ const Navbar: React.FC = () => {
               Batches
             </NavLink>
             <NavLink
-              to="/routine"
+              to="/routines"
               className={navLinkStyle}
               onClick={() => setMenuOpen(false)}
             >
