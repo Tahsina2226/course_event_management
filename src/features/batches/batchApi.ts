@@ -1,34 +1,46 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
+export interface Batch {
+    id: number;
+    name: string;
+    department: string;
+    semester: string;
+}
+
+export interface UpdateBatchPayload {
+    id: number;
+    data: Partial<Batch>;
+}
+
 export const batchApi = createApi({
     reducerPath: 'batchApi',
     baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:5000/api/' }),
     tagTypes: ['Batch'],
     endpoints: (builder) => ({
-        getBatches: builder.query({
+        getBatches: builder.query < Batch[], void> ({
             query: () => 'batches',
-            providesTags: ['Batch']
+            providesTags: ['Batch'],
         }),
-        deleteBatch: builder.mutation({
+        deleteBatch: builder.mutation < void, number> ({
             query: (id) => ({
                 url: `batches/${id}`,
-                method: 'DELETE'
+                method: 'DELETE',
             }),
-            invalidatesTags: ['Batch']
+            invalidatesTags: ['Batch'],
         }),
-        updateBatch: builder.mutation({
+        updateBatch: builder.mutation < void, UpdateBatchPayload> ({
             query: ({ id, data }) => ({
                 url: `batches/${id}`,
                 method: 'PUT',
-                body: data
+                body: data,
             }),
-            invalidatesTags: ['Batch']
-        })
-    })
+            invalidatesTags: ['Batch'],
+        }),
+  }),
 });
 
 export const {
     useGetBatchesQuery,
     useDeleteBatchMutation,
-    useUpdateBatchMutation
+    useUpdateBatchMutation,
 } = batchApi;

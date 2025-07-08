@@ -6,6 +6,7 @@ import EditBatch from "./features/batches/EditBatch";
 import Routines from "./features/routines/Routines";
 import Events from "./features/events/Events";
 import News from "./features/news/News";
+
 import { Toaster } from "react-hot-toast";
 import Footer from "./components/Footer ";
 
