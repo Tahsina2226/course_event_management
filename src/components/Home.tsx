@@ -1,7 +1,8 @@
 import React from "react";
 import { motion } from "framer-motion";
+import type { Variants } from "framer-motion";
 
-const containerVariants = {
+const containerVariants: Variants = {
   hidden: { opacity: 0, y: 50 },
   visible: {
     opacity: 1,
@@ -14,12 +15,12 @@ const containerVariants = {
   },
 };
 
-const itemVariants = {
+const itemVariants: Variants = {
   hidden: { opacity: 0, y: 20 },
   visible: { opacity: 1, y: 0 },
 };
 
-const typingVariants = {
+const typingVariants: Variants = {
   hidden: { width: 0 },
   visible: {
     width: "100%",
@@ -30,7 +31,7 @@ const typingVariants = {
   },
 };
 
-const Home = () => {
+const Home: React.FC = () => {
   return (
     <motion.div
       variants={containerVariants}
@@ -44,7 +45,8 @@ const Home = () => {
         whileHover={{ scale: 1.1, rotate: 5, color: "#15803d" }}
         whileTap={{ scale: 0.95, rotate: -5 }}
       >
-        Empower Your Academic Journey with University Course & Event Management 🎓
+        Empower Your Academic Journey with University Course & Event Management
+        🎓
       </motion.h1>
 
       <motion.p
@@ -59,7 +61,9 @@ const Home = () => {
           exit="hidden"
           className="inline-block"
         >
-          Streamline batch management, access comprehensive class routines, stay informed with real-time campus news, and never miss out on upcoming academic events.
+          Streamline batch management, access comprehensive class routines, stay
+          informed with real-time campus news, and never miss out on upcoming
+          academic events.
         </motion.span>
       </motion.p>
 
@@ -67,12 +71,18 @@ const Home = () => {
         variants={itemVariants}
         className="mt-6 max-w-xl text-gray-600 text-base sm:text-lg italic"
       >
-        Designed for students, faculty, and administrators, our platform fosters seamless communication and efficient academic planning.
+        Designed for students, faculty, and administrators, our platform fosters
+        seamless communication and efficient academic planning.
       </motion.p>
 
       <motion.button
         variants={itemVariants}
-        whileHover={{ scale: 1.05, backgroundColor: "#15803d", color: "white", boxShadow: "0 0 15px rgba(21, 128, 61, 0.7)" }}
+        whileHover={{
+          scale: 1.05,
+          backgroundColor: "#15803d",
+          color: "white",
+          boxShadow: "0 0 15px rgba(21, 128, 61, 0.7)",
+        }}
         whileTap={{ scale: 0.95, rotate: -3 }}
         className="bg-emerald-600 hover:bg-emerald-700 shadow-md mt-12 px-8 py-3 rounded-lg font-semibold text-white transition-colors"
       >
