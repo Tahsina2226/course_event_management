@@ -1,7 +1,6 @@
 import React from "react";
 import { Routes, Route, Navigate, useParams } from "react-router-dom";
 import Navbar from "./components/Navbar";
-
 import Home from "./components/Home";
 import Login from "./components/Login";
 import Register from "./components/Register";
@@ -15,6 +14,9 @@ import Routines from "./features/routines/Routines";
 import Events from "./features/events/Events";
 import News from "./features/news/News";
 import Footer from "./components/Footer ";
+import CreateRoutineForm from "./features/routines/CreateRoutineForm";
+import EditRoutineForm from "./features/routines/EditRoutineForm";
+
 const ProtectedRoute: React.FC<{ children: JSX.Element }> = ({ children }) => {
   const token = useAppSelector((state) => state.auth.token);
   if (!token) {
@@ -74,8 +76,26 @@ function App() {
         />
 
         <Route path="/routines" element={<Routines />} />
+        <Route
+          path="/routines/create"
+          element={
+            <ProtectedRoute>
+              <CreateRoutineForm />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/routines/edit/:id"
+          element={
+            <ProtectedRoute>
+              <EditRoutineForm />
+            </ProtectedRoute>
+          }
+        />
+
         <Route path="/events" element={<Events />} />
         <Route path="/news" element={<News />} />
+
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
       <Footer />

@@ -1,33 +1,23 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import type { RootState } from "../../redux/Store";
 
-export interface EnrollmentPayload {
+interface EnrollRequest {
   userEmail: string;
   batchId: number;
 }
 
-export interface EnrollmentResponse {
+interface EnrollResponse {
   message: string;
 }
 
 export const enrollApi = createApi({
   reducerPath: "enrollApi",
-  baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:5000/api/",
-    prepareHeaders: (headers, { getState }) => {
-      const token = (getState() as RootState).auth.token;
-      if (token) {
-        headers.set("Authorization", `Bearer ${token}`);
-      }
-      return headers;
-    },
-  }),
+  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:5000/api" }),
   endpoints: (builder) => ({
-    enrollToBatch: builder.mutation<EnrollmentResponse, EnrollmentPayload>({
-      query: (payload) => ({
-        url: "enrollments",
+    enrollToBatch: builder.mutation<EnrollResponse, EnrollRequest>({
+      query: ({ userEmail, batchId }) => ({
+        url: "/enroll",
         method: "POST",
-        body: payload,
+        body: { userEmail, batchId },
       }),
     }),
   }),
