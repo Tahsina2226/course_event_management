@@ -5,6 +5,7 @@ interface AuthState {
   token: string | null;
   email: string | null;
   role: string | null;
+  department: string | null;
   loading: boolean;
   error: string | null;
 }
@@ -13,6 +14,7 @@ const initialState: AuthState = {
   token: localStorage.getItem("token"),
   email: localStorage.getItem("email"),
   role: localStorage.getItem("role"),
+  department: localStorage.getItem("department"),
   loading: false,
   error: null,
 };
@@ -32,22 +34,36 @@ function decodeJwt(token: string) {
 }
 
 export const login = createAsyncThunk<
-  { token: string; role: string; email: string },
+  { token: string; role: string; email: string; department: string | null },
   { email: string; password: string },
   { rejectValue: string }
->("auth/login", async (credentials, thunkAPI) => {
+>("auth/login", async ({ email, password }, thunkAPI) => {
   try {
     const response = await axios.post(
-      "http://localhost:5000/api/admin/login",
-      credentials
+      "https://university-lp-backend.vercel.app/api/admin/login",
+      { email, password }
     );
     const { token, role } = response.data;
     const decoded = decodeJwt(token);
-    const email = decoded?.email || "";
+    const userEmail = decoded?.email || "";
+
+    let department = null;
+    try {
+      const enrollRes = await axios.get(
+        `https://university-lp-backend.vercel.app/api/enroll/${userEmail}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      department = enrollRes.data.batch_department || null;
+    } catch {
+      department = null;
+    }
+
     localStorage.setItem("token", token);
-    localStorage.setItem("email", email);
+    localStorage.setItem("email", userEmail);
     localStorage.setItem("role", role);
-    return { token, role, email };
+    if (department) localStorage.setItem("department", department);
+
+    return { token, role, email: userEmail, department };
   } catch (error: any) {
     return thunkAPI.rejectWithValue(
       error.response?.data?.message || "Login failed"
@@ -57,21 +73,23 @@ export const login = createAsyncThunk<
 
 export const register = createAsyncThunk<
   { token: string; role: string; email: string },
-  { email: string; password: string },
+  { name: string; email: string; role: string; password: string },
   { rejectValue: string }
->("auth/register", async (credentials, thunkAPI) => {
+>("auth/register", async ({ name, email, role, password }, thunkAPI) => {
   try {
     const response = await axios.post(
-      "http://localhost:5000/api/admin/register",
-      credentials
+      "https://university-lp-backend.vercel.app/api/admin/register",
+      { name, email, role, password }
     );
-    const { token, role } = response.data;
+    const { token, role: userRole } = response.data;
     const decoded = decodeJwt(token);
-    const email = decoded?.email || "";
+    const userEmail = decoded?.email || "";
+
     localStorage.setItem("token", token);
-    localStorage.setItem("email", email);
-    localStorage.setItem("role", role);
-    return { token, role, email };
+    localStorage.setItem("email", userEmail);
+    localStorage.setItem("role", userRole);
+
+    return { token, role: userRole, email: userEmail };
   } catch (error: any) {
     return thunkAPI.rejectWithValue(
       error.response?.data?.message || "Registration failed"
@@ -87,9 +105,11 @@ const authSlice = createSlice({
       state.token = null;
       state.email = null;
       state.role = null;
+      state.department = null;
       localStorage.removeItem("token");
       localStorage.removeItem("email");
       localStorage.removeItem("role");
+      localStorage.removeItem("department");
     },
   },
   extraReducers: (builder) => {
@@ -103,6 +123,7 @@ const authSlice = createSlice({
         state.token = action.payload.token;
         state.role = action.payload.role;
         state.email = action.payload.email;
+        state.department = action.payload.department;
       })
       .addCase(login.rejected, (state, action) => {
         state.loading = false;
@@ -117,6 +138,7 @@ const authSlice = createSlice({
         state.token = action.payload.token;
         state.role = action.payload.role;
         state.email = action.payload.email;
+        state.department = null;
       })
       .addCase(register.rejected, (state, action) => {
         state.loading = false;

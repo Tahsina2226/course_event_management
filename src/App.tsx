@@ -17,19 +17,20 @@ import Footer from "./components/Footer ";
 import CreateRoutineForm from "./features/routines/CreateRoutineForm";
 import EditRoutineForm from "./features/routines/EditRoutineForm";
 
-const ProtectedRoute: React.FC<{ children: JSX.Element }> = ({ children }) => {
+const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
   const token = useAppSelector((state) => state.auth.token);
   if (!token) {
     return <Navigate to="/login" replace />;
   }
-  return children;
+  return <>{children}</>;
 };
 
 const EnrollWrapper: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   if (!id) return <p>Batch ID not found</p>;
-  const batchId = Number(id);
-  return <Enroll batchId={batchId} />;
+  return <Enroll batchId={id} batchDepartment={""} />;
 };
 
 function App() {
@@ -41,7 +42,6 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-
         <Route
           path="/batches"
           element={
@@ -74,7 +74,6 @@ function App() {
             </ProtectedRoute>
           }
         />
-
         <Route path="/routines" element={<Routines />} />
         <Route
           path="/routines/create"
@@ -92,10 +91,8 @@ function App() {
             </ProtectedRoute>
           }
         />
-
         <Route path="/events" element={<Events />} />
         <Route path="/news" element={<News />} />
-
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
       <Footer />

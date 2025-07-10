@@ -16,7 +16,7 @@ export interface UpdateBatchPayload {
 export const batchApi = createApi({
   reducerPath: "batchApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:5000/api/",
+    baseUrl: "https://university-lp-backend.vercel.app/api/",
     prepareHeaders: (headers, { getState }) => {
       const token = (getState() as RootState).auth.token;
       if (token) {

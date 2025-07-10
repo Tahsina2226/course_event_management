@@ -1,3 +1,4 @@
+// src/redux/Store.ts
 import { configureStore } from "@reduxjs/toolkit";
 import authReducer from "../features/auth/auth";
 import { batchApi } from "../features/batches/batchApi";

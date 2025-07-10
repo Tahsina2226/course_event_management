@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import type { RootState } from "../redux/store";
+import type { RootState } from "../../redux/Store";
 
 export interface Routine {
   id: number;
@@ -13,7 +13,7 @@ export interface Routine {
 export const routineApi = createApi({
   reducerPath: "routineApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:5000/api/",
+    baseUrl: "https://university-lp-backend.vercel.app/api/",
     prepareHeaders: (headers, { getState }) => {
       const token = (getState() as RootState).auth.token;
       if (token) {
@@ -24,8 +24,9 @@ export const routineApi = createApi({
   }),
   tagTypes: ["Routine"],
   endpoints: (builder) => ({
-    getRoutines: builder.query<Routine[], void>({
-      query: () => "routines",
+    getRoutines: builder.query<Routine[], string | void>({
+      query: (department) =>
+        department ? `routines?department=${department}` : "routines",
       providesTags: ["Routine"],
     }),
     deleteRoutine: builder.mutation<void, number>({

@@ -1,26 +1,22 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-interface EnrollRequest {
-  userEmail: string;
-  batchId: number;
-}
-
-interface EnrollResponse {
-  message: string;
-}
-
 export const enrollApi = createApi({
   reducerPath: "enrollApi",
-  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:5000/api" }),
+  baseQuery: fetchBaseQuery({
+    baseUrl: "/api/enroll",
+  }),
   endpoints: (builder) => ({
-    enrollToBatch: builder.mutation<EnrollResponse, EnrollRequest>({
-      query: ({ userEmail, batchId }) => ({
-        url: "/enroll",
+    enrollUser: builder.mutation<
+      { message: string },
+      { email: string; batchId: string }
+    >({
+      query: (payload) => ({
+        url: "/",
         method: "POST",
-        body: { userEmail, batchId },
+        body: payload,
       }),
     }),
   }),
 });
 
-export const { useEnrollToBatchMutation } = enrollApi;
+export const { useEnrollUserMutation } = enrollApi;

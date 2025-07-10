@@ -35,69 +35,147 @@ const CreateRoutineForm: React.FC = () => {
   };
 
   return (
-    <div className="bg-white shadow mx-auto p-6 rounded max-w-md">
-      <h2 className="mb-4 font-bold text-2xl text-center">Create Routine</h2>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <label className="block mb-1 font-medium">Course Name</label>
-          <input
-            type="text"
-            value={course_name}
-            onChange={(e) => setCourseName(e.target.value)}
-            className="px-3 py-2 border rounded w-full"
-            placeholder="e.g. Math 101"
-          />
+    <div className="flex justify-center items-center bg-gray-50 p-4 min-h-screen">
+      <div className="bg-white shadow-lg rounded-xl w-full max-w-md overflow-hidden">
+        <div className="bg-gradient-to-r from-emerald-500 to-teal-600 p-6 text-white">
+          <h2 className="font-bold text-2xl text-center">Create New Routine</h2>
+          <p className="mt-1 text-emerald-100 text-center">
+            Fill in the details to schedule a new class
+          </p>
         </div>
-        <div>
-          <label className="block mb-1 font-medium">Day</label>
-          <input
-            type="text"
-            value={day}
-            onChange={(e) => setDay(e.target.value)}
-            className="px-3 py-2 border rounded w-full"
-            placeholder="e.g. Monday"
-          />
-        </div>
-        <div>
-          <label className="block mb-1 font-medium">Time</label>
-          <input
-            type="text"
-            value={time}
-            onChange={(e) => setTime(e.target.value)}
-            className="px-3 py-2 border rounded w-full"
-            placeholder="e.g. 9:00 AM - 10:00 AM"
-          />
-        </div>
-        <div>
-          <label className="block mb-1 font-medium">Room</label>
-          <input
-            type="text"
-            value={room}
-            onChange={(e) => setRoom(e.target.value)}
-            className="px-3 py-2 border rounded w-full"
-            placeholder="e.g. Room 204"
-          />
-        </div>
-        <div>
-          <label className="block mb-1 font-medium">Batch ID</label>
-          <input
-            type="number"
-            value={batch_id}
-            onChange={(e) =>
-              setBatchId(e.target.value === "" ? "" : Number(e.target.value))
-            }
-            className="px-3 py-2 border rounded w-full"
-            placeholder="e.g. 1"
-          />
-        </div>
-        <button
-          type="submit"
-          disabled={isLoading}
-          className="bg-emerald-500 hover:bg-emerald-600 py-2 rounded w-full text-white"
-        >
-          {isLoading ? "Creating..." : "Create Routine"}
-        </button>
-      </form>
+
+        <form onSubmit={handleSubmit} className="space-y-5 p-6">
+          <div className="space-y-1">
+            <label className="block font-medium text-gray-700 text-sm">
+              Course Name
+            </label>
+            <input
+              type="text"
+              value={course_name}
+              onChange={(e) => setCourseName(e.target.value)}
+              className="px-4 py-2 border border-gray-300 focus:border-emerald-500 rounded-lg focus:ring-2 focus:ring-emerald-500 w-full transition"
+              placeholder="e.g. Mathematics 101"
+            />
+          </div>
+
+          <div className="gap-4 grid grid-cols-2">
+            <div className="space-y-1">
+              <label className="block font-medium text-gray-700 text-sm">
+                Day
+              </label>
+              <select
+                value={day}
+                onChange={(e) => setDay(e.target.value)}
+                className="px-4 py-2 border border-gray-300 focus:border-emerald-500 rounded-lg focus:ring-2 focus:ring-emerald-500 w-full transition"
+              >
+                <option value="">Select Day</option>
+                {[
+                  "Monday",
+                  "Tuesday",
+                  "Wednesday",
+                  "Thursday",
+                  "Friday",
+                  "Saturday",
+                  "Sunday",
+                ].map((day) => (
+                  <option key={day} value={day}>
+                    {day}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="space-y-1">
+              <label className="block font-medium text-gray-700 text-sm">
+                Time
+              </label>
+              <input
+                type="time"
+                value={time}
+                onChange={(e) => setTime(e.target.value)}
+                className="px-4 py-2 border border-gray-300 focus:border-emerald-500 rounded-lg focus:ring-2 focus:ring-emerald-500 w-full transition"
+              />
+            </div>
+          </div>
+
+          <div className="gap-4 grid grid-cols-2">
+            <div className="space-y-1">
+              <label className="block font-medium text-gray-700 text-sm">
+                Room
+              </label>
+              <input
+                type="text"
+                value={room}
+                onChange={(e) => setRoom(e.target.value)}
+                className="px-4 py-2 border border-gray-300 focus:border-emerald-500 rounded-lg focus:ring-2 focus:ring-emerald-500 w-full transition"
+                placeholder="e.g. Room 204"
+              />
+            </div>
+
+            <div className="space-y-1">
+              <label className="block font-medium text-gray-700 text-sm">
+                Batch ID
+              </label>
+              <select
+                value={batch_id}
+                onChange={(e) =>
+                  setBatchId(
+                    e.target.value === "" ? "" : Number(e.target.value)
+                  )
+                }
+                className="px-4 py-2 border border-gray-300 focus:border-emerald-500 rounded-lg focus:ring-2 focus:ring-emerald-500 w-full transition"
+              >
+                <option value="">Select Batch</option>
+                {[...Array(100)].map((_, i) => (
+                  <option key={i + 1} value={i + 1}>
+                    Batch {i + 1}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          <div className="pt-2">
+            <button
+              type="submit"
+              disabled={isLoading}
+              className={`w-full py-3 px-4 rounded-lg font-medium text-white shadow-md transition ${
+                isLoading
+                  ? "bg-gray-400 cursor-not-allowed"
+                  : "bg-emerald-500 hover:bg-emerald-600 hover:shadow-lg"
+              }`}
+            >
+              {isLoading ? (
+                <span className="flex justify-center items-center">
+                  <svg
+                    className="mr-3 -ml-1 w-5 h-5 text-white animate-spin"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    ></circle>
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    ></path>
+                  </svg>
+                  Creating...
+                </span>
+              ) : (
+                "Create Routine"
+              )}
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 };
