@@ -44,7 +44,6 @@ const Batches = () => {
     return matchesSearch && matchesDepartment;
   });
 
-  // Pagination calculations
   const totalPages = Math.ceil(filteredBatches.length / ITEMS_PER_PAGE);
   const paginatedBatches = filteredBatches.slice(
     (currentPage - 1) * ITEMS_PER_PAGE,
@@ -124,7 +123,7 @@ const Batches = () => {
   };
 
   const handleEnroll = async (
-    batchId: number,
+    _batchId: number,
     batchName: string,
     batchDept: string
   ) => {
@@ -455,36 +454,15 @@ const Batches = () => {
                         <div className="font-semibold text-gray-800 text-sm">
                           {batch.name}
                         </div>
-                        <div className="text-gray-500 text-xs">
-                          {batch.code}
-                        </div>
                       </td>
-                      <td className="px-6 py-4 border-gray-300 border-r font-medium text-gray-700 text-sm whitespace-nowrap">
+                      <td className="px-6 py-4 border-gray-300 border-r text-gray-600 text-sm whitespace-nowrap">
                         {batch.department}
                       </td>
-                      <td className="px-6 py-4 border-gray-300 border-r font-medium text-gray-700 text-sm whitespace-nowrap">
+                      <td className="px-6 py-4 border-gray-300 border-r text-gray-600 text-sm whitespace-nowrap">
                         {batch.semester}
                       </td>
                       {(isAdmin || isUser) && (
-                        <td className="space-x-2 px-6 py-4 font-medium text-sm text-right whitespace-nowrap">
-                          {isAdmin && (
-                            <>
-                              <button
-                                onClick={() =>
-                                  navigate(`/batches/edit/${batch.id}`)
-                                }
-                                className="inline-flex items-center gap-1 bg-white hover:bg-gray-50 shadow-sm px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-emerald-500 focus:ring-offset-1 focus:ring-offset-white text-gray-700"
-                              >
-                                Edit
-                              </button>
-                              <button
-                                onClick={() => handleDelete(batch.id)}
-                                className="inline-flex items-center gap-1 bg-white hover:bg-red-50 shadow-sm px-2 py-1 border border-red-300 rounded-md focus:outline-none focus:ring-1 focus:ring-red-400 focus:ring-offset-1 focus:ring-offset-white text-red-600"
-                              >
-                                Delete
-                              </button>
-                            </>
-                          )}
+                        <td className="space-x-3 px-6 py-4 text-right whitespace-nowrap">
                           {isUser && (
                             <button
                               onClick={() =>
@@ -494,10 +472,28 @@ const Batches = () => {
                                   batch.department
                                 )
                               }
-                              className="bg-emerald-500 hover:bg-emerald-600 shadow-sm px-4 py-1.5 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:ring-offset-1 focus:ring-offset-white font-semibold text-white transition"
+                              className="bg-emerald-500 hover:bg-emerald-600 px-3 py-1 rounded-md text-white text-sm transition"
                             >
                               Enroll
                             </button>
+                          )}
+                          {isAdmin && (
+                            <>
+                              <button
+                                onClick={() =>
+                                  navigate(`/batches/edit/${batch.id}`)
+                                }
+                                className="bg-yellow-400 hover:bg-yellow-500 px-3 py-1 rounded-md text-white text-sm transition"
+                              >
+                                Edit
+                              </button>
+                              <button
+                                onClick={() => handleDelete(batch.id)}
+                                className="bg-red-500 hover:bg-red-600 px-3 py-1 rounded-md text-white text-sm transition"
+                              >
+                                Delete
+                              </button>
+                            </>
                           )}
                         </td>
                       )}
@@ -508,44 +504,42 @@ const Batches = () => {
             </table>
           </div>
         )}
-      </motion.div>
 
-      {/* Pagination */}
-      {totalPages > 1 && (
-        <div className="flex justify-center space-x-3 mt-6 select-none">
-          <button
-            onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-            disabled={currentPage === 1}
-            className={`px-3 py-1 rounded-md border border-gray-300 bg-white text-gray-700 hover:bg-gray-100 transition disabled:opacity-40 disabled:cursor-not-allowed`}
+        {totalPages > 1 && (
+          <nav
+            className="flex justify-center items-center space-x-2 py-4 border-gray-300 border-t"
+            aria-label="Pagination"
           >
-            Prev
-          </button>
-          {[...Array(totalPages)].map((_, i) => {
-            const page = i + 1;
-            const isActive = page === currentPage;
-            return (
+            <button
+              onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
+              disabled={currentPage === 1}
+              className="bg-gray-200 hover:bg-gray-300 disabled:opacity-50 px-3 py-1 rounded-md text-gray-600 transition"
+            >
+              Previous
+            </button>
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
               <button
                 key={page}
                 onClick={() => setCurrentPage(page)}
-                className={`px-3 py-1 rounded-md border border-gray-300 ${
-                  isActive
+                className={`px-3 py-1 rounded-md transition ${
+                  page === currentPage
                     ? "bg-emerald-500 text-white"
-                    : "bg-white text-gray-700 hover:bg-gray-100"
-                } transition`}
+                    : "bg-gray-200 text-gray-600 hover:bg-gray-300"
+                }`}
               >
                 {page}
               </button>
-            );
-          })}
-          <button
-            onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
-            disabled={currentPage === totalPages}
-            className={`px-3 py-1 rounded-md border border-gray-300 bg-white text-gray-700 hover:bg-gray-100 transition disabled:opacity-40 disabled:cursor-not-allowed`}
-          >
-            Next
-          </button>
-        </div>
-      )}
+            ))}
+            <button
+              onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
+              disabled={currentPage === totalPages}
+              className="bg-gray-200 hover:bg-gray-300 disabled:opacity-50 px-3 py-1 rounded-md text-gray-600 transition"
+            >
+              Next
+            </button>
+          </nav>
+        )}
+      </motion.div>
     </div>
   );
 };

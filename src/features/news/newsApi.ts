@@ -4,6 +4,12 @@ export interface News {
   id: number;
   title: string;
   description: string;
+  category?: string;
+  date?: string;
+  imageUrl?: string;
+  readTime?: string;
+  views?: number;
+  likes?: number;
 }
 
 export const newsApi = createApi({
