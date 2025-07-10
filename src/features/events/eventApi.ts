@@ -1,5 +1,9 @@
-// src/features/events/eventApi.ts
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+
+export interface Speaker {
+  name: string;
+  title: string;
+}
 
 export interface Event {
   id: number;
@@ -7,6 +11,9 @@ export interface Event {
   description: string;
   location: string;
   date: string;
+  category?: string;
+  time?: string;
+  speakers?: Speaker[];
 }
 
 export const eventApi = createApi({
